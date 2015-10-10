@@ -1,3 +1,6 @@
+-- |
+-- The types and functions are trivial and self-descriptive,
+-- hence this sentence is the sole documentation you get on them.
 module Success
 (
   Success,
