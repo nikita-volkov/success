@@ -1,7 +1,7 @@
 name:
   success
 version:
-  1
+  0.2
 synopsis:
   A version of Either specialised for encoding of success or failure
 description:
@@ -46,7 +46,8 @@ library
   default-language:
     Haskell2010
   exposed-modules:
-    Success
+    Success.Pure
+    Success.Impure
   build-depends:
     base >= 4.6 && < 5
 
