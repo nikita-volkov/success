@@ -35,7 +35,7 @@ instance Applicative m => Alternative (Success e m) where
   (<|>) (Success m1) (Success m2) =
     Success (liftA2 (<|>) m1 m2)
 
-instance Monad m => Monad (Success e m) where
+instance (Applicative m, Monad m) => Monad (Success e m) where
   {-# INLINE return #-}
   return =
     pure
@@ -49,7 +49,7 @@ instance Monad m => Monad (Success e m) where
           Left (Just e) -> pure (Success.Pure.failure e)
           Right x -> run (m2' x)
 
-instance Monad m => MonadPlus (Success e m) where
+instance (Applicative m, Monad m) => MonadPlus (Success e m) where
   {-# INLINE mzero #-}
   mzero =
     empty
