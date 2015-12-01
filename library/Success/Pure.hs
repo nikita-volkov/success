@@ -17,11 +17,12 @@ where
 import Prelude
 import Control.Applicative
 import Control.Monad
+import Control.Monad.Error.Class
 
 
 newtype Success a b =
   Success (Either (Maybe a) b)
-  deriving (Functor, Applicative, Monad)
+  deriving (Functor, Applicative, Monad, MonadError (Maybe a))
 
 instance Alternative (Success a) where
   {-# INLINE empty #-}

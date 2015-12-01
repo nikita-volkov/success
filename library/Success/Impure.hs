@@ -12,6 +12,7 @@ where
 import Prelude
 import Control.Applicative
 import Control.Monad
+import Control.Monad.Error.Class
 import qualified Success.Pure
 
 
@@ -56,6 +57,17 @@ instance (Applicative m, Monad m) => MonadPlus (Success e m) where
   {-# INLINE mplus #-}
   mplus =
     (<|>)
+
+instance Monad m => MonadError (Maybe a) (Success a m) where
+  {-# INLINE throwError #-}
+  throwError =
+    Success . return . throwError
+  {-# INLINE catchError #-}
+  catchError (Success m) handler =
+    Success $ m >>= either (unwrap . handler) (return . Success.Pure.success) . Success.Pure.asEither
+    where
+      unwrap (Success m) =
+        m
 
 {-# INLINE run #-}
 run :: Success e m a -> m (Success.Pure.Success e a)

@@ -49,5 +49,6 @@ library
     Success.Pure
     Success.Impure
   build-depends:
+    mtl >= 2 && < 3,
     base >= 4.6 && < 5
 
