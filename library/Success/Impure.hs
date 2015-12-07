@@ -12,6 +12,7 @@ where
 import Prelude
 import Control.Applicative
 import Control.Monad
+import Control.Monad.IO.Class
 import Control.Monad.Error.Class
 import qualified Success.Pure
 
@@ -68,6 +69,11 @@ instance Monad m => MonadError (Maybe a) (Success a m) where
     where
       unwrap (Success m) =
         m
+
+instance MonadIO m => MonadIO (Success a m) where
+  {-# INLINE liftIO #-}
+  liftIO io =
+    Success (fmap pure (liftIO io))
 
 {-# INLINE run #-}
 run :: Success e m a -> m (Success.Pure.Success e a)

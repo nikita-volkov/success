@@ -50,5 +50,6 @@ library
     Success.Impure
   build-depends:
     mtl >= 2 && < 3,
+    transformers >= 0.3 && < 0.5,
     base >= 4.6 && < 5
 
