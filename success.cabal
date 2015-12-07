@@ -1,7 +1,7 @@
 name:
   success
 version:
-  0.2.1.1
+  0.2.2
 synopsis:
   A version of Either specialised for encoding of success or failure
 description:
@@ -49,6 +49,8 @@ library
     Success.Pure
     Success.Impure
   build-depends:
+    transformers-base >= 0.4 && < 0.5,
+    monad-control >= 1 && < 2,
     mtl >= 2 && < 3,
     transformers >= 0.3 && < 0.5,
     base >= 4.6 && < 5

@@ -1,3 +1,4 @@
+{-# LANGUAGE UndecidableInstances #-}
 -- |
 -- The types and functions are trivial and self-descriptive,
 -- hence this sentence is the sole documentation you get on them.
@@ -14,6 +15,9 @@ import Control.Applicative
 import Control.Monad
 import Control.Monad.IO.Class
 import Control.Monad.Error.Class
+import Control.Monad.Trans.Class
+import Control.Monad.Trans.Control
+import Control.Monad.Base
 import qualified Success.Pure
 
 
@@ -59,7 +63,7 @@ instance (Applicative m, Monad m) => MonadPlus (Success e m) where
   mplus =
     (<|>)
 
-instance Monad m => MonadError (Maybe a) (Success a m) where
+instance (Applicative m, Monad m) => MonadError (Maybe a) (Success a m) where
   {-# INLINE throwError #-}
   throwError =
     Success . return . throwError
@@ -70,10 +74,40 @@ instance Monad m => MonadError (Maybe a) (Success a m) where
       unwrap (Success m) =
         m
 
-instance MonadIO m => MonadIO (Success a m) where
+instance MonadTrans (Success a) where
+  {-# INLINE lift #-}
+  lift =
+    Success . liftM pure
+
+instance (Applicative m, MonadIO m) => MonadIO (Success a m) where
   {-# INLINE liftIO #-}
-  liftIO io =
-    Success (fmap pure (liftIO io))
+  liftIO =
+    lift . liftIO
+
+instance (Applicative m, MonadBase n m) => MonadBase n (Success a m) where
+  {-# INLINE liftBase #-}
+  liftBase =
+    lift . liftBase
+
+instance MonadTransControl (Success a) where
+  type StT (Success a) b =
+    Success.Pure.Success a b
+  {-# INLINE liftWith #-}
+  liftWith onUnlift =
+    lift $ onUnlift $ \(Success impl) -> impl
+  {-# INLINE restoreT #-}
+  restoreT =
+    Success
+
+instance (Applicative m, MonadBaseControl n m) => MonadBaseControl n (Success a m) where
+  type StM (Success a m) b =
+    ComposeSt (Success a) m b
+  {-# INLINE liftBaseWith #-}
+  liftBaseWith =
+    defaultLiftBaseWith
+  {-# INLINE restoreM #-}
+  restoreM =
+    defaultRestoreM
 
 {-# INLINE run #-}
 run :: Success e m a -> m (Success.Pure.Success e a)
