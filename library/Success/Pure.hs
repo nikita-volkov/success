@@ -22,7 +22,7 @@ import Control.Monad.Error.Class
 
 newtype Success a b =
   Success (Either (Maybe a) b)
-  deriving (Functor, Applicative, Monad, MonadError (Maybe a))
+  deriving (Functor, Applicative, Monad, MonadError (Maybe a), Show)
 
 instance Alternative (Success a) where
   {-# INLINE empty #-}
