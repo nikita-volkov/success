@@ -15,6 +15,8 @@ module Success.Pure
 where
 
 import Prelude
+import Data.Foldable
+import Data.Traversable
 import Control.Applicative
 import Control.Monad
 import Control.Monad.Error.Class

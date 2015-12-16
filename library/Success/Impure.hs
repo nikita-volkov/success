@@ -11,6 +11,8 @@ module Success.Impure
 where
 
 import Prelude
+import Data.Foldable
+import Data.Traversable
 import Control.Applicative
 import Control.Monad
 import Control.Monad.IO.Class
