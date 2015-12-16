@@ -23,7 +23,7 @@ import qualified Success.Pure
 
 newtype Success a m b =
   Success (m (Success.Pure.Success a b))
-  deriving (Functor)
+  deriving (Functor, Foldable, Traversable)
 
 instance Applicative m => Applicative (Success e m) where
   {-# INLINE pure #-}
