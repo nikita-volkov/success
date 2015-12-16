@@ -1,7 +1,7 @@
 name:
   success
 version:
-  0.2.3
+  0.2.3.1
 synopsis:
   A version of Either specialised for encoding of success or failure
 description:
